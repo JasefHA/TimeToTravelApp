@@ -40,7 +40,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       children: [
                         AppLargeText(text: "Time To Travel", size: 38),
                         AppText(text: "Madrid, España", size: 26),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         Container(
                           //margin: EdgeInsets.only(top: 30),
                           width: 300,
