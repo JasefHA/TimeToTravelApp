@@ -6,7 +6,9 @@ import 'package:time_to_travel_app/model/data_model.dart';
 
 class DataServices {
   String baseUrl = "http://mark.bslmeiyu.com/api";
+  //String baseUrl = "http://localhost:3000/api";
   Future<List<DataModel>> getInfo() async {
+    //var apiUrl = '/destinos';
     var apiUrl = '/getplaces';
     http.Response res = await http.get(Uri.parse(baseUrl + apiUrl));
     try {

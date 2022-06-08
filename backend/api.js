@@ -150,6 +150,6 @@ router.route('/destinos/actualizar').post((request,response)=>{
     })
 })
 
-var port = process.env.PORT || 8090;
+var port = process.env.PORT || 3000;
 app.listen(port);
 console.log('TimeToTravelAPP Api iniciando en el puerto: '+port);//mensaje inicio de servicio
