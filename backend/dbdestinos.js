@@ -15,6 +15,20 @@ async function getDestinos(){
     }
 }
 
+//async que devuelve restaurantes
+async function getRestaurantes(){
+    try {
+        let pool = await sql.connect(config);
+        let restaurantes = await  pool.request()
+            .execute("SP_GetRestaurantes");
+        //console.log('Conexion con exito');
+        return restaurantes.recordsets;
+    } catch (error) {
+        //console.log('Error en la conexion');
+        console.log(error);
+    }
+}
+
 //obtener destino por ID
 async function getDestinosxID(destinoID){
     try {
@@ -66,7 +80,8 @@ async function actualizarDestino(destino){
 
 module.exports = {
     getDestinos : getDestinos,
+    getRestaurantes: getRestaurantes,
     getDestinosxID : getDestinosxID,
-    insertarDestino:insertarDestino,
-    actualizarDestino:actualizarDestino
+    insertarDestino: insertarDestino,
+    actualizarDestino: actualizarDestino
 }; 
