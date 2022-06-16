@@ -86,8 +86,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
-                            BlocProvider.of<AppCubits>(context)
-                                .DetailPage(info[index]);
+                            //BlocProvider.of<AppCubits>(context)
+                                //.DetailPage(info[index]);
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 15, top: 10),
@@ -98,8 +98,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 color: Colors.white,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        "http://mark.bslmeiyu.com/uploads/" +
-                                            info[index].img),
+                                      "https://www.realmadrid.com/img/sc_960px/reforma-del-estadio-santiago-bernabeu-05_20220124034518.jpg"
+                                        //"http://mark.bslmeiyu.com/uploads/" +
+                                        //    info[index].img
+                                    ),
                                     fit: BoxFit.cover)),
                           ),
                         );

@@ -39,8 +39,10 @@ class _DetailPageState extends State<DetailPage> {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                               image: NetworkImage(
-                                  "http://mark.bslmeiyu.com/uploads/" +
-                                      detail.places.img),
+                                "https://www.realmadrid.com/img/sc_960px/reforma-del-estadio-santiago-bernabeu-05_20220124034518.jpg"
+                                  //"http://mark.bslmeiyu.com/uploads/" +
+                                      //detail.places.img
+                              ),
                               fit: BoxFit.cover),
                         ))),
                 Positioned(
