@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return Scaffold(body: BlocBuilder<AppCubits, CubitStates>(
       builder: (context, state) {
         if (state is LoadedState) {
-          var info = state.places;
+          var lugares = state.places;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,7 +69,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       tabs: [
                         Tab(text: "Lugares"),
                         Tab(text: "Restaurantes"),
-                        Tab(text: "Emociones")
+                        Tab(text: "Alojamientos")
                       ]),
                 ),
               ),
@@ -81,13 +81,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   controller: _tabController,
                   children: [
                     ListView.builder(
-                      itemCount: info.length,
+                      itemCount: lugares.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (BuildContext context, int index) {
                         return GestureDetector(
                           onTap: () {
                             BlocProvider.of<AppCubits>(context)
-                                .DetailPage(info[index]);
+                                .DetailPage(lugares[index]);
                           },
                           child: Container(
                             margin: const EdgeInsets.only(right: 15, top: 10),
@@ -98,9 +98,9 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                 color: Colors.white,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                      info[index].img
+                                      lugares[index].img
                                         //"http://mark.bslmeiyu.com/uploads/" +
-                                        //    info[index].img
+                                        //    lugares[index].img
                                     ),
                                     fit: BoxFit.cover)),
                           ),
