@@ -79,6 +79,23 @@ router.route('/restaurantes').get((request,response)=>{
     })
 })
 
+/** 
+ * @swagger
+ * /api/alejamientos:
+ *  get:
+ *      description: Use para obtener todos los alojamientos
+ *      responses:
+ *          '200':
+ *              description: Listados correctamente
+*/
+//traer todos los destinos
+router.route('/alejamientos').get((request,response)=>{
+    dbdestinos.getAlojamientos().then(result => {
+        response.json(result[0]);
+    })
+})
+
+
 /**
  * @swagger
  * /api/destinos/{id}:

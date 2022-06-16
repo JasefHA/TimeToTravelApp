@@ -29,6 +29,20 @@ async function getRestaurantes(){
     }
 }
 
+//async que devuelve alojamientos
+async function getAlojamientos(){
+    try {
+        let pool = await sql.connect(config);
+        let alojamientos = await  pool.request()
+            .execute("SP_GetAlojamientos");
+        //console.log('Conexion con exito');
+        return alojamientos.recordsets;
+    } catch (error) {
+        //console.log('Error en la conexion');
+        console.log(error);
+    }
+}
+
 //obtener destino por ID
 async function getDestinosxID(destinoID){
     try {
@@ -81,6 +95,7 @@ async function actualizarDestino(destino){
 module.exports = {
     getDestinos : getDestinos,
     getRestaurantes: getRestaurantes,
+    getAlojamientos: getAlojamientos,
     getDestinosxID : getDestinosxID,
     insertarDestino: insertarDestino,
     actualizarDestino: actualizarDestino
