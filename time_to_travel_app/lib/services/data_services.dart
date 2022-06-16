@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:time_to_travel_app/model/data_model.dart';
+//import 'package:time_to_travel_app/model/data_model_Restaurante.dart';
 
 //AQUI SE HACE LA CONEXION A LA API
 
@@ -33,7 +34,7 @@ class DataServices {
     try {
       if (resRestaurantes.statusCode == 200) {
         List<dynamic> list = json.decode(resRestaurantes.body);
-        print(list[1]);
+        //print(list[1]);
         return list.map((e) => DataModel.fromJson(e)).toList();
       } else {
         return <DataModel>[];

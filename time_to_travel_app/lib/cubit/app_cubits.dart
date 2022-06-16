@@ -16,7 +16,7 @@ class AppCubits extends Cubit<CubitStates> {
       emit(LoadingState());
       places = await data.getDestinos();
       restaurants = await data.getRestaurantes();
-      emit(LoadedState(places));
+      emit(LoadedState(places,restaurants));
     } catch (e) {
       print(e);
     }
@@ -27,6 +27,6 @@ class AppCubits extends Cubit<CubitStates> {
   }
 
   goHome() {
-    emit(LoadedState(places));
+    emit(LoadedState(places,restaurants));
   }
 }

@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (context, state) {
         if (state is LoadedState) {
           var lugares = state.places;
-          //TODO var restaurantes = state.places;
+          var restaurantes = state.restaurants;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       labelPadding: const EdgeInsets.only(left: 20, right: 20),
                       controller: _tabController,
                       labelColor: Colors.black,
-                      labelStyle: TextStyle(fontSize: 20),
+                      labelStyle: TextStyle(fontSize: 22),
                       unselectedLabelColor: Colors.grey,
                       isScrollable: true,
                       indicatorSize: TabBarIndicatorSize.label,
@@ -108,7 +108,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         );
                       },
                     ),
-                    const Text("Excepteur ad in excepteur qui dolore quis id magna ea in officia ad velit. Esse pariatur ut nostrud aute esse. Pariatur esse minim veniam esse aute consectetur. Irure ex et officia ex consectetur Lorem commodo tempor amet. Ullamco eu nisi ex aliquip ea et ipsum ad ipsum."),
+                    ListView.builder(
+                      itemCount: restaurantes.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<AppCubits>(context)
+                                .DetailPage(restaurantes[index]);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 15, top: 10),
+                            width: 200,
+                            height: 500,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      restaurantes[index].img
+                                        //"http://mark.bslmeiyu.com/uploads/" +
+                                        //    lugares[index].img
+                                    ),
+                                    
+                                    fit: BoxFit.cover)),
+                          ),
+                        );
+                      },
+                    ),
                     const Text("Ullamco tempor ex nisi exercitation laborum. Nulla ea cupidatat aliqua est anim duis pariatur aliqua. Enim proident proident Lorem sint mollit elit. Qui esse mollit qui labore elit reprehenderit nisi incididunt consequat ut velit amet. Esse ut esse exercitation ex ut ea cillum qui minim tempor enim dolor.")
                   ],
                 ),
