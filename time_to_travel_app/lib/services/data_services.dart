@@ -7,16 +7,33 @@ import 'package:time_to_travel_app/model/data_model.dart';
 class DataServices {
   //String baseUrl = "http://mark.bslmeiyu.com/api";
   String baseUrl = "http://10.0.2.2:3000/api";
-  Future<List<DataModel>> getInfo() async {
+
+  Future<List<DataModel>> getDestinos() async {
     var apiDestinos = '/destinos';
-    //TODO var apiRestaurantes = '/restaurantes';
     //var apiUrl = '/getplaces';
     http.Response resDestinos = await http.get(Uri.parse(baseUrl + apiDestinos));
-    //TODO http.Response resRestaurantes = await http.get(Uri.parse(baseUrl + apiRestaurantes));
     try {
       if (resDestinos.statusCode == 200) {
         List<dynamic> list = json.decode(resDestinos.body);
-        print(list);
+        //print(list);
+        return list.map((e) => DataModel.fromJson(e)).toList();
+      } else {
+        return <DataModel>[];
+      }
+    } catch (e) {
+      print(e);
+      return <DataModel>[];
+    }
+  }
+
+  Future<List<DataModel>> getRestaurantes() async {
+    var apiRestaurantes = '/restaurantes';
+
+    http.Response resRestaurantes = await http.get(Uri.parse(baseUrl + apiRestaurantes));
+    try {
+      if (resRestaurantes.statusCode == 200) {
+        List<dynamic> list = json.decode(resRestaurantes.body);
+        print(list[1]);
         return list.map((e) => DataModel.fromJson(e)).toList();
       } else {
         return <DataModel>[];

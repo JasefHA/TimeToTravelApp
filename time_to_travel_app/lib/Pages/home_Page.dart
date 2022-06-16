@@ -28,6 +28,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       builder: (context, state) {
         if (state is LoadedState) {
           var lugares = state.places;
+          //TODO var restaurantes = state.places;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
