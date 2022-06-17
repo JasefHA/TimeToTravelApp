@@ -9,8 +9,8 @@ class SearchPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lo más visitado'),
-        elevation: 0,
+        title: const Text('PAQUETES TURISTICOS'),
+        elevation: 10,
         actions: [
           IconButton(onPressed: (){}, icon: const Icon(Icons.search_outlined))
         ],

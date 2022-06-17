@@ -62,4 +62,22 @@ class DataServices {
       return <DataModel>[];
     }
   }
+
+  Future<List<DataModel>> getPaquetes() async {
+    var apiPaquetes= '/paquetes';
+
+    http.Response resPaquetes = await http.get(Uri.parse(baseUrl + apiPaquetes));
+    try {
+      if (resPaquetes.statusCode == 200) {
+        List<dynamic> list = json.decode(resPaquetes.body);
+        //print(list[1]);
+        return list.map((e) => DataModel.fromJson(e)).toList();
+      } else {
+        return <DataModel>[];
+      }
+    } catch (e) {
+      print(e);
+      return <DataModel>[];
+    }
+  }
 }
