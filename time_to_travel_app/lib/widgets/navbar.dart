@@ -35,11 +35,6 @@ class Navbar extends StatelessWidget {
             onTap: null,
           ),
           ListTile(
-            leading: Icon(Icons.favorite),
-            title: Text('Favoritos'),
-            onTap: null,
-          ),
-          ListTile(
             leading: Icon(Icons.people),
             title: Text('Amigos'),
             onTap: null,
