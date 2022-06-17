@@ -89,7 +89,7 @@ router.route('/restaurantes').get((request,response)=>{
  *              description: Listados correctamente
 */
 //traer todos los destinos
-router.route('/alejamientos').get((request,response)=>{
+router.route('/alojamientos').get((request,response)=>{
     dbdestinos.getAlojamientos().then(result => {
         response.json(result[0]);
     })

@@ -22,13 +22,15 @@ class LoadingState extends CubitStates {
 }
 
 class LoadedState extends CubitStates {
-  LoadedState(this.places, this.restaurants);
+  LoadedState(this.places, this.restaurants, this.alojamientos);
   final List<DataModel> places;
   final List<DataModel> restaurants;
+  final List<DataModel> alojamientos;
   @override
   //todo: implements props
   List<Object> get props => [places];
   List<Object> get propss => [restaurants];
+  List<Object> get prop => [alojamientos];
 }
 
 class DetailState extends CubitStates {

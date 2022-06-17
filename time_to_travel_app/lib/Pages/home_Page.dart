@@ -29,6 +29,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         if (state is LoadedState) {
           var lugares = state.places;
           var restaurantes = state.restaurants;
+          var alojamientos = state.alojamientos;
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -136,7 +137,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                         );
                       },
                     ),
-                    const Text("Ullamco tempor ex nisi exercitation laborum. Nulla ea cupidatat aliqua est anim duis pariatur aliqua. Enim proident proident Lorem sint mollit elit. Qui esse mollit qui labore elit reprehenderit nisi incididunt consequat ut velit amet. Esse ut esse exercitation ex ut ea cillum qui minim tempor enim dolor.")
+                    ListView.builder(
+                      itemCount: alojamientos.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          onTap: () {
+                            BlocProvider.of<AppCubits>(context)
+                                .DetailPage(alojamientos[index]);
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 15, top: 10),
+                            width: 200,
+                            height: 500,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.white,
+                                image: DecorationImage(
+                                    image: NetworkImage(
+                                      alojamientos[index].img
+                                        //"http://mark.bslmeiyu.com/uploads/" +
+                                        //    lugares[index].img
+                                    ),
+                                    
+                                    fit: BoxFit.cover)),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),

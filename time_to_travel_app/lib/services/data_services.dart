@@ -22,7 +22,7 @@ class DataServices {
         return <DataModel>[];
       }
     } catch (e) {
-      print(e);
+      //print(e);
       return <DataModel>[];
     }
   }
@@ -35,6 +35,24 @@ class DataServices {
       if (resRestaurantes.statusCode == 200) {
         List<dynamic> list = json.decode(resRestaurantes.body);
         //print(list[1]);
+        return list.map((e) => DataModel.fromJson(e)).toList();
+      } else {
+        return <DataModel>[];
+      }
+    } catch (e) {
+      //print(e);
+      return <DataModel>[];
+    }
+  }
+
+  Future<List<DataModel>> getAlojamientos() async {
+    var apiAlojamientos = '/alojamientos';
+
+    http.Response resAlojamientos = await http.get(Uri.parse(baseUrl + apiAlojamientos));
+    try {
+      if (resAlojamientos.statusCode == 200) {
+        List<dynamic> list = json.decode(resAlojamientos.body);
+        print(list[1]);
         return list.map((e) => DataModel.fromJson(e)).toList();
       } else {
         return <DataModel>[];
