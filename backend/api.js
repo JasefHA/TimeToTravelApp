@@ -72,7 +72,7 @@ router.route('/destinos').get((request,response)=>{
  *          '200':
  *              description: Listados correctamente
 */
-//traer todos los destinos
+//traer todos los restaurantes
 router.route('/restaurantes').get((request,response)=>{
     dbdestinos.getRestaurantes().then(result => {
         response.json(result[0]);
@@ -88,13 +88,29 @@ router.route('/restaurantes').get((request,response)=>{
  *          '200':
  *              description: Listados correctamente
 */
-//traer todos los destinos
+//traer todos los alojamientos
 router.route('/alojamientos').get((request,response)=>{
     dbdestinos.getAlojamientos().then(result => {
         response.json(result[0]);
     })
 })
 
+
+/** 
+ * @swagger
+ * /api/paquetes:
+ *  get:
+ *      description: Use para obtener todos los paquetes
+ *      responses:
+ *          '200':
+ *              description: Listados correctamente
+*/
+//traer todos los destinos
+router.route('/paquetes').get((request,response)=>{
+    dbdestinos.getPaquetes().then(result => {
+        response.json(result[0]);
+    })
+})
 
 /**
  * @swagger

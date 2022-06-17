@@ -43,6 +43,20 @@ async function getAlojamientos(){
     }
 }
 
+//async que devuelve paquetes
+async function getPaquetes(){
+    try {
+        let pool = await sql.connect(config);
+        let paquetes = await  pool.request()
+            .execute("SP_GetPaquetes");
+        //console.log('Conexion con exito');
+        return paquetes.recordsets;
+    } catch (error) {
+        //console.log('Error en la conexion');
+        console.log(error);
+    }
+}
+
 //obtener destino por ID
 async function getDestinosxID(destinoID){
     try {
@@ -96,6 +110,7 @@ module.exports = {
     getDestinos : getDestinos,
     getRestaurantes: getRestaurantes,
     getAlojamientos: getAlojamientos,
+    getPaquetes:getPaquetes,
     getDestinosxID : getDestinosxID,
     insertarDestino: insertarDestino,
     actualizarDestino: actualizarDestino
