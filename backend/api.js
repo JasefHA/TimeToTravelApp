@@ -81,7 +81,7 @@ router.route('/restaurantes').get((request,response)=>{
 
 /** 
  * @swagger
- * /api/alejamientos:
+ * /api/alojamientos:
  *  get:
  *      description: Use para obtener todos los alojamientos
  *      responses:

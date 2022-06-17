@@ -40,7 +40,7 @@ class DataServices {
         return <DataModel>[];
       }
     } catch (e) {
-      //print(e);
+      print(e);
       return <DataModel>[];
     }
   }
@@ -52,7 +52,7 @@ class DataServices {
     try {
       if (resAlojamientos.statusCode == 200) {
         List<dynamic> list = json.decode(resAlojamientos.body);
-        print(list[1]);
+        //print(list[1]);
         return list.map((e) => DataModel.fromJson(e)).toList();
       } else {
         return <DataModel>[];
