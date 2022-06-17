@@ -36,75 +36,20 @@ class _DetailPageState extends State<DetailPage> {
             //  height: double.maxFinite,
             child: Stack(
               children: [
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    width: double.maxFinite,
-                    height: 350,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(detail.places.img
-                              //"http://mark.bslmeiyu.com/uploads/" +
-                              //detail.places.img
-                              ),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  top: 60,
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            _scaffoldKEy.currentState?.openDrawer();
-                          },
-                          icon: Icon(Icons.menu),
-                          color: Colors.white,
-                          iconSize: 35),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  top: 60,
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            BlocProvider.of<AppCubits>(context).goHome();
-                          },
-                          icon: Icon(Icons.home),
-                          color: Colors.white,
-                          iconSize: 35),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin:const EdgeInsets.only(top: 330),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30)),
-                  ),
-                  child: Positioned(
-                    top: 330,
-                    child: Container(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        right: 20,
-                        top: 30,
+                ListView(
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: 320.0,
+                        left: 20.0,
+                        right: 20.0,
                       ),
-                      width: MediaQuery.of(context).size.width,
-                      height: double.maxFinite,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(60),
-                            topRight: Radius.circular(60)),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                              20.0), //                 <--- border radius here
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,8 +99,9 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                               const SizedBox(width: 5),
                               AppText(
-                                text:
-                                    "(" + detail.places.stars.toString() + ".0)",
+                                text: "(" +
+                                    detail.places.stars.toString() +
+                                    ".0)",
                                 color: AppColors.textColor2,
                               )
                             ],
@@ -223,35 +169,90 @@ class _DetailPageState extends State<DetailPage> {
                             height: 5,
                           ),
                           AppText(
-                            text: detail.places.description,
+                            text: detail.places.description +
+                                'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
                             color: AppColors.mainTextColor,
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(
+                              top: 20.0,
+                              // left: 20.0,
+                              //right: 20.0,
+                              bottom: 20.0,
+                            ),
+                            child: Row(
+                              children: [
+                                AppButtons(
+                                  size: 60,
+                                  color: AppColors.textColor2,
+                                  backgroundColor: Colors.white,
+                                  borderColor: AppColors.textColor1,
+                                  isIcon: true,
+                                  icon: Icons.favorite_border,
+                                ),
+                                const SizedBox(width: 20),
+                                ResponsiveButton(
+                                  isResponsive: true,
+                                )
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
+                  ],
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    width: double.maxFinite,
+                    height: 350,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(
+                          30.0,
+                        ), //                 <--- border radius here
+                      ),
+                      image: DecorationImage(
+                          image: NetworkImage(detail.places.img
+                              //"http://mark.bslmeiyu.com/uploads/" +
+                              //detail.places.img
+                              ),
+                          fit: BoxFit.cover),
+                    ),
                   ),
                 ),
                 Positioned(
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
+                  left: 10,
+                  top: 60,
                   child: Row(
                     children: [
-                      AppButtons(
-                        size: 60,
-                        color: AppColors.textColor2,
-                        backgroundColor: Colors.white,
-                        borderColor: AppColors.textColor1,
-                        isIcon: true,
-                        icon: Icons.favorite_border,
-                      ),
-                      const SizedBox(width: 20),
-                      ResponsiveButton(
-                        isResponsive: true,
-                      )
+                      IconButton(
+                          onPressed: () {
+                            _scaffoldKEy.currentState?.openDrawer();
+                          },
+                          icon: Icon(Icons.menu),
+                          color: Colors.white,
+                          iconSize: 35),
                     ],
                   ),
-                )
+                ),
+                Positioned(
+                  right: 10,
+                  top: 60,
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            BlocProvider.of<AppCubits>(context).goHome();
+                          },
+                          icon: Icon(Icons.home),
+                          color: Colors.white,
+                          iconSize: 35),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
