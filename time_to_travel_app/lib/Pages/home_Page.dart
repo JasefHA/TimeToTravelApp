@@ -78,7 +78,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                               const EdgeInsets.only(left: 20, right: 20),
                           controller: _tabController,
                           labelColor: Colors.black,
-                          labelStyle: TextStyle(fontSize: 22),
+                          labelStyle: TextStyle(fontSize: 20),
                           unselectedLabelColor: Colors.grey,
                           isScrollable: true,
                           indicatorSize: TabBarIndicatorSize.label,

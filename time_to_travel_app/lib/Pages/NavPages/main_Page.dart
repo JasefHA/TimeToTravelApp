@@ -3,6 +3,7 @@ import 'package:time_to_travel_app/Colors/colors.dart';
 import 'package:time_to_travel_app/Pages/home_Page.dart';
 import 'package:time_to_travel_app/Pages/NavPages/my_Page.dart';
 import 'package:time_to_travel_app/Pages/NavPages/search_Page.dart';
+import 'package:time_to_travel_app/Pages/NavPages/search_Pageeee.dart';
 
 import 'barItem_Page.dart';
 

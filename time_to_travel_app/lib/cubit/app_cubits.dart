@@ -12,13 +12,15 @@ class AppCubits extends Cubit<CubitStates> {
   late final places;
   late final restaurants;
   late final alojamientos;
+  late final paquetes;
   void getData() async {
     try {
       emit(LoadingState());
       places = await data.getDestinos();
       restaurants = await data.getRestaurantes();
       alojamientos = await data.getAlojamientos();
-      emit(LoadedState(places,restaurants,alojamientos));
+      paquetes = await data.getPaquetes();
+      emit(LoadedState(places,restaurants,alojamientos,paquetes));
     } catch (e) {
       print(e);
     }
@@ -29,6 +31,6 @@ class AppCubits extends Cubit<CubitStates> {
   }
 
   goHome() {
-    emit(LoadedState(places,restaurants,alojamientos));
+    emit(LoadedState(places,restaurants,alojamientos,paquetes));
   }
 }
