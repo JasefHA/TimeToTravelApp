@@ -1,7 +1,7 @@
 
 var Destino = require('./destino');
 const dbdestinos = require('./dbdestinos');
-
+//prueba
 
 var express = require('express');
 var bodyParser = require('body-parser');
