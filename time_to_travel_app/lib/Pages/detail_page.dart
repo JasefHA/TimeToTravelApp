@@ -22,12 +22,15 @@ class _DetailPageState extends State<DetailPage> {
   int selectedIndex = -1;
   int voto = 0;
   String ciudad = "Madrid";
+  final GlobalKey<ScaffoldState> _scaffoldKEy = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubits, CubitStates>(
       builder: (context, state) {
         DetailState detail = state as DetailState;
         return Scaffold(
+          key: _scaffoldKEy,
+          drawer: Navbar(),
           body: Container(
             // width: double.maxFinite,
             //  height: double.maxFinite,
@@ -47,6 +50,21 @@ class _DetailPageState extends State<DetailPage> {
                               ),
                           fit: BoxFit.cover),
                     ),
+                  ),
+                ),
+                Positioned(
+                  left: 10,
+                  top: 60,
+                  child: Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {
+                            _scaffoldKEy.currentState?.openDrawer();
+                          },
+                          icon: Icon(Icons.menu),
+                          color: Colors.white,
+                          iconSize: 35),
+                    ],
                   ),
                 ),
                 Positioned(
