@@ -16,9 +16,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   var images = {
-    "mapa-ico.png": "Mapa",
-    "actividades-ico.png": "Eventos",
-    "restaurant-ico.png": "Restaurant",
+    "image-icon-map.png": "Mapa",
+    "image-icon-place.png": "Eventos",
+    "image-icon-food.png": "Restaurant",
     "travel-ico.png": "Popular",
   };
   final GlobalKey<ScaffoldState> _scaffoldKEy = GlobalKey();
