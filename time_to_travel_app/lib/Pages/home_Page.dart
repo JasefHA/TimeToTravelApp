@@ -51,14 +51,14 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           iconSize: 35,
                         ),
                         Expanded(child: Container()),
-                        Container(
+                        /*Container(
                           margin: const EdgeInsets.only(right: 20),
                           width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.withOpacity(0.5)),
-                        )
+                        )*/
                       ],
                     ),
                   ),
