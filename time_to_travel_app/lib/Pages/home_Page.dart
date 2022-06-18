@@ -19,7 +19,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     "image-icon-map.png": "Mapa",
     "image-icon-place.png": "Eventos",
     "image-icon-food.png": "Restaurant",
-    "travel-ico.png": "Popular",
+    "image-icon-popular.png": "Popular",
   };
   final GlobalKey<ScaffoldState> _scaffoldKEy = GlobalKey();
 
