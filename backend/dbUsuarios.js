@@ -1,6 +1,22 @@
 var config = require('./dbconfig') //instanciamos el archivo dbconfig
 const sql = require('mssql') //traemos el paquete necesario mssql
 
+
+
+async function getTotalUsuarios() {
+
+    try {
+        let pool = await sql.connect(config);
+        let resultado = await pool
+            .request()
+            .query('SP_GET_TOTAL_USUARIOS');
+        pool.close.bind(pool);
+        return resultado.recordset ? resultado.recordset[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 //async que devuelve todos los usuarios
 async function getUsuarios(limite = 5, desde = 0) {
 
@@ -52,7 +68,6 @@ async function getRol(rol = '') {
 //async que devuelve paquetes
 async function postUsuario(obj) {
     try {
-
         let pool = await sql.connect(config);
         let resultado = await pool
             .request()
@@ -75,20 +90,21 @@ async function postUsuario(obj) {
 
 //obtener destino por ID
 async function putUsuario_x_idEmail(obj) {
+    console.log(obj);
     try {
         let pool = await sql.connect(config);
-        let resultado = await pool.request()
+        let resultado = await pool
             .request()
             .input('idEmail', sql.VarChar(50), obj.idEmail)
             .input('nombre', sql.VarChar(50), obj.nombre)
             .input('apellido', sql.VarChar(50), obj.apellido)
-            .input('email', sql.VarChar(50), obj.email)
-            .input('pass', sql.VarChar(50), obj.pass)
+          //  .input('email', sql.VarChar(50), obj.email)
+            .input('pass', sql.VarChar(200), obj.pass)
             .input('imagen', sql.VarChar(100), obj.imagen)
             .input('rol', sql.VarChar(100), obj.rol)
             .input('estado', sql.VarChar(100), obj.estado)
             .input('google', sql.VarChar(100), obj.google)
-            .query('SP_POST_USUARIO @idEmail, @nombre,@apellido,@email,@pass,@imagen,@rol,@estado,@google')
+            .query('SP_PUT_USUARIO_x_ID_EMAIL @idEmail, @nombre,@apellido,@pass,@imagen,@rol,@estado,@google')
         pool.close.bind(pool);
         return resultado.recordset ? resultado.recordset[0] : null;
     } catch (error) {
@@ -114,7 +130,7 @@ async function deleteUsuario_x_idEmail(idEmail = '') {
 }
 
 //actualizar registro
-async function patchUsuario_x_idEmail(idEmail = '',pass='123456') {
+async function patchUsuario_x_idEmail(idEmail = '', pass = '123456') {
     try {
         let pool = await sql.connect(config);
         let resultado = await pool
@@ -132,6 +148,7 @@ async function patchUsuario_x_idEmail(idEmail = '',pass='123456') {
 
 
 module.exports = {
+    getTotalUsuarios: getTotalUsuarios,
     getUsuarios: getUsuarios,
     getUsuario_x_idEmail: getUsuario_x_idEmail,
     getRol: getRol,

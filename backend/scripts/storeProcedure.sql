@@ -1,4 +1,23 @@
 -- use TimeToTravelApp
+create PROC SP_GET_TOTAL_USUARIOS
+AS
+set nocount on
+
+if exists(select * from t_Usuario where idEstado=1)
+begin
+
+	SELECT 	COUNT(idUsuario) as 'total'
+	FROM t_Usuario 
+	WHERE idEstado=1
+
+end
+-- exec SP_GET_TOTAL_USUARIOS
+
+go
+
+
+
+
 CREATE PROC SP_GET_USUARIOS(
 													@limite int = 5,
 													@desde int = 0
@@ -28,7 +47,7 @@ end
 
 go
 
-CREATE PROC SP_GET_USUARIO_x_ID_EMAIL(
+create PROC SP_GET_USUARIO_x_ID_EMAIL(
 													@idEmail varchar(50)=''
 )
 AS
@@ -46,16 +65,18 @@ begin try
 			SET @id = cast(@idEmail as int)
 		END
 	END
-	SELECT U.idUsuario as 'id',U.nombre,U.apellido,U.email,U.imagen,E.estado,R.rol ,G.google
-	FROM t_Usuario U
-	INNER JOIN t_Estado E
-	ON E.idEstado =U.idEstado 
-	INNER JOIN t_Rol R
-	ON R.idRol =U.idRol
-	INNER JOIN t_Google G
-	ON G.idGoogle =U.idGoogle
-	WHERE U.idEstado=1 and U.idUsuario =@id
-
+	if exists(select * from t_Usuario where idUsuario = @id and idEstado=1)
+	begin
+		SELECT U.idUsuario as 'id',U.nombre,U.apellido,U.email,U.imagen,E.estado,R.rol ,G.google
+		FROM t_Usuario U
+		INNER JOIN t_Estado E
+		ON E.idEstado =U.idEstado 
+		INNER JOIN t_Rol R
+		ON R.idRol =U.idRol
+		INNER JOIN t_Google G
+		ON G.idGoogle =U.idGoogle
+		WHERE U.idEstado=1 and U.idUsuario =@id
+	end
 end try
 begin catch
 
@@ -163,11 +184,11 @@ end
 
 go
 
-CREATE PROC SP_PUT_USUARIO_x_ID_EMAIL(
+create PROC SP_PUT_USUARIO_x_ID_EMAIL(
 										@idEmail varchar(50)='',
 										@nombre varchar(50),
 										@apellido varchar(50),
-										@email varchar(50),
+								--		@email varchar(50),
 										@pass varchar(200),
 										@imagen varchar(80),
 										@rol varchar(80),
@@ -190,37 +211,40 @@ begin try
 			SET @id = cast(@idEmail as int)
 		END
 	END
-	DECLARE		@elRol int,
-						@elEstado INT,
-						@cuentaGoogle int
 
-	SET @elRol = (select TOP (1) idRol from t_Rol where	rol = @rol)
-	SET @elEstado = (select TOP (1) idEstado	from t_Estado where	estado = @estado)
-	SET @cuentaGoogle = (select TOP (1) idGoogle from t_Google where	google = @google)
+	if exists(select * from t_Usuario where idUsuario = @id and idEstado=1)
+	begin
+		DECLARE		@elRol int,
+							@elEstado INT,
+							@cuentaGoogle int
 
-	UPDATE t_Usuario SET nombre =@nombre,
-											 apellido=@apellido,
-											 email=@email,
-											 pass=@pass,
-											 imagen=@imagen,
-											 idRol=@elRol,
-											 idEstado=@elEstado,
-											 idgoogle=@cuentaGoogle
-	WHERE idUsuario = @id
+		SET @elRol = (select TOP (1) idRol from t_Rol where	rol = @rol)
+		SET @elEstado = (select TOP (1) idEstado	from t_Estado where	estado = @estado)
+		SET @cuentaGoogle = (select TOP (1) idGoogle from t_Google where	google = @google)
 
-	exec SP_GET_USUARIO_x_ID_EMAIL @id
+		UPDATE t_Usuario SET nombre =@nombre,
+												 apellido=@apellido,
+											--	 email=@email,
+												 pass=@pass,
+												 imagen=@imagen,
+												 idRol=@elRol,
+												 idEstado=@elEstado,
+												 idgoogle=@cuentaGoogle
+		WHERE idUsuario = @id
 
+		exec SP_GET_USUARIO_x_ID_EMAIL @id
+	END
 end try
 begin catch
 
 end catch
 
---exec SP_PUT_ACTUALIZAR_USUARIO 16,'odi','odi','test12@test.com','123456','default','ROL_USUARIO','ACTIVO','NO ACTIVO'
+--exec SP_PUT_USUARIO_x_ID_EMAIL 17,'odi','odi','123456','default','ROL_USUARIO','ACTIVO','NO ACTIVO'
 
 
 go
 
-CREATE PROC SP_DELETE_USUARIO_x_ID_EMAIL(
+create PROC SP_DELETE_USUARIO_x_ID_EMAIL(
 															@idEmail varchar(50)=''
 														)
 AS
@@ -239,10 +263,12 @@ begin try
 			SET @id = cast(@idEmail as int)
 		END
 	END
-	exec SP_GET_USUARIO_x_ID_EMAIL @id
-	UPDATE t_Usuario SET idEstado = 2
-	WHERE idUsuario = @id
-
+	if exists(select * from t_Usuario where idUsuario = @id and idEstado=1)
+	begin
+		exec SP_GET_USUARIO_x_ID_EMAIL @id
+		UPDATE t_Usuario SET idEstado = 2
+		WHERE idUsuario = @id
+	END
 end try
 begin catch
 
@@ -253,7 +279,7 @@ end catch
 
 go
 
-CREATE PROC PATCH_SP_PASS_x_ID_EMAIL(
+create PROC PATCH_SP_PASS_x_ID_EMAIL(
 										@idEmail varchar(50)='',
 										@pass varchar(200) 
 									)
@@ -273,10 +299,13 @@ begin try
 			SET @id = cast(@idEmail as int)
 		END
 	END
-	UPDATE t_Usuario SET pass = @pass
-	WHERE idUsuario = @id
-	exec SP_GET_USUARIO_x_ID_EMAIL @id
 
+	if exists(select * from t_Usuario where idUsuario = @id and idEstado=1)
+	begin
+		UPDATE t_Usuario SET pass = @pass
+		WHERE idUsuario = @id
+		exec SP_GET_USUARIO_x_ID_EMAIL @id
+	END
 end try
 begin catch
 
