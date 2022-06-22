@@ -1,6 +1,5 @@
 
 var Destino = require('./destino');
-var Usuario = require('./usuario');
 const dbdestinos = require('./dbdestinos');
 const dbUsuarios = require('./dbUsuarios');
 //prueba
@@ -8,8 +7,9 @@ const dbUsuarios = require('./dbUsuarios');
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-const { request } = require('express');
-const { response } = require('express');
+const { request, response } = require('express');
+const { check } = require('express-validator');
+const { validarCampos } = require('./middlewares/validarCampos');
 //probando comentario
 var app = express();
 var router = express.Router();
@@ -203,6 +203,9 @@ router.route('/destinos/actualizar').post((request, response) => {
 })
 
 
+
+//    rutas usuario ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 router.route('/usuarios').get(async (req = request, res = response) => {
 
     let { limite = 5, desde = 0 } = req.query;
@@ -224,7 +227,7 @@ router.route('/usuarios').get(async (req = request, res = response) => {
     });
 })
 
-router.route('/usuarios/:id').get(async (req = request, res = response) => {
+router.route('/usuarios/:id').get([validarCampos], async (req = request, res = response) => {
 
     const { id } = req.params;
 
@@ -235,7 +238,13 @@ router.route('/usuarios/:id').get(async (req = request, res = response) => {
     });
 })
 
-router.route('/usuarios').post(async (req = request, res = response) => {
+router.route('/usuarios').post([
+    check('nombre', 'Todos los campos son obligatorios').not().isEmpty(),
+    check('apellido', 'Todos los campos son obligatorios').not().isEmpty(),
+    check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
+    check('email', 'Correo ingresado no valido').isEmail(),
+    validarCampos
+], async (req = request, res = response) => {
     const { google, rol, password, imagen, ...rest } = req.body;
     rest.rol = 'ROL_USUARIO';
     rest.google = 'NO ACTIVO';
@@ -251,7 +260,14 @@ router.route('/usuarios').post(async (req = request, res = response) => {
         result
     });
 })
-router.route('/usuarios/:id').put(async (req = request, res = response) => {
+
+router.route('/usuarios/:id').put([
+    check('nombre', 'Todos los campos son obligatorios').not().isEmpty(),
+    check('apellido', 'Todos los campos son obligatorios').not().isEmpty(),
+    check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
+    check('email', 'Correo ingresado no valido').isEmail(),
+    validarCampos
+], async (req = request, res = response) => {
     const { id, google, password, ...rest } = req.body;
     rest.idEmail = req.params.id;
     rest.google = 'NO ACTIVO';
@@ -262,17 +278,20 @@ router.route('/usuarios/:id').put(async (req = request, res = response) => {
     });
 })
 
-router.route('/usuarios/password/:id').patch(async (req = request, res = response) => {
-    const {password} = req.body;
-    const {id} = req.params;
-    const result = await dbUsuarios.patchUsuario_x_idEmail(id,password);
+router.route('/usuarios/password/:id').patch([
+    check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
+    validarCampos
+],async (req = request, res = response) => {
+    const { password } = req.body;
+    const { id } = req.params;
+    const result = await dbUsuarios.patchUsuario_x_idEmail(id, password);
     res.json({
         result
     });
 })
 
-router.route('/usuarios/:id').delete(async (req = request, res = response) => {
-    const {id} = req.params;
+router.route('/usuarios/:id').delete([validarCampos], async (req = request, res = response) => {
+    const { id } = req.params;
     const result = await dbUsuarios.deleteUsuario_x_idEmail(id);
     res.json({
         result
@@ -280,9 +299,21 @@ router.route('/usuarios/:id').delete(async (req = request, res = response) => {
 })
 
 
+//    rutas autenticacion +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
+router.route('/login').post([
+    check('email', 'Correo ingresado no valido').isEmail(),
+    check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
+    validarCampos
+],async (req = request, res = response) => {
+    const { email, password } = req.body;
 
-
+    res.json({
+        msg: 'login',
+        email,
+        password
+    });
+})
 
 
 
