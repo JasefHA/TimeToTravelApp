@@ -43,3 +43,10 @@ class DetailState extends CubitStates {
   List<Object> get props => [places];
 }
 
+class UserState extends CubitStates {
+  UserState(this.userF);
+  final UserState userF;
+  @override
+  //todo: implements props
+  List<Object> get props => [userF];
+}
