@@ -2,14 +2,15 @@
 var Destino = require('./destino');
 const dbdestinos = require('./dbdestinos');
 const dbUsuarios = require('./dbUsuarios');
-//prueba
+
+const { request, response } = require('express');
+const { check } = require('express-validator');
+const { validarCampos } = require('./middlewares/validarCampos');
+const { generateJWT } = require('./helpers/generate-jwt');
 
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
-const { request, response } = require('express');
-const { check } = require('express-validator');
-const { validarCampos } = require('./middlewares/validarCampos');
 //probando comentario
 var app = express();
 var router = express.Router();
@@ -256,9 +257,16 @@ router.route('/usuarios').post([
         rest.imagen = imagen == '' ? 'default' : imagen;
     }
     const result = await dbUsuarios.postUsuario(rest);
-    res.json({
-        result
-    });
+    if (result != null) {
+        res.status(200).json({
+            result
+        });
+    } else {
+        res.status(400).json({
+            result
+        });
+    }
+
 })
 
 router.route('/usuarios/:id').put([
@@ -281,7 +289,7 @@ router.route('/usuarios/:id').put([
 router.route('/usuarios/password/:id').patch([
     check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
     validarCampos
-],async (req = request, res = response) => {
+], async (req = request, res = response) => {
     const { password } = req.body;
     const { id } = req.params;
     const result = await dbUsuarios.patchUsuario_x_idEmail(id, password);
@@ -305,14 +313,38 @@ router.route('/login').post([
     check('email', 'Correo ingresado no valido').isEmail(),
     check('password', 'La contraseña no debe ser menor a 6 caracteres').isLength({ min: 6 }),
     validarCampos
-],async (req = request, res = response) => {
+], async (req = request, res = response) => {
+
     const { email, password } = req.body;
 
-    res.json({
-        msg: 'login',
-        email,
-        password
-    });
+    try {
+        const user = await dbUsuarios.getUsuarioPass_x_idEmail(email);
+        const result = null;
+        if (!user) {
+            return res.status(400).json({
+                result
+                //msg: ' Email / password no valido'
+            });
+        }
+        //const validatePassword = bcryptjs.compareSync(password, user.password);
+        if (password != user.pass) {
+            return res.status(400).json({
+                result
+                //msg: ' Email / password no valido'
+            });
+        }
+
+        const token = await generateJWT(user.id);
+        res.status(200).json({
+            user,
+            token
+        });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({
+            msg: 'Hable con el administrador'
+        });
+    }
 })
 
 

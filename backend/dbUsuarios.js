@@ -146,6 +146,20 @@ async function patchUsuario_x_idEmail(idEmail = '', pass = '123456') {
     }
 }
 
+//async que devuelve usuarios por id/email
+async function getUsuarioPass_x_idEmail(idEmail = '') {
+    try {
+        let pool = await sql.connect(config);
+        let resultado = await pool
+            .request()
+            .input('idEmail', sql.VarChar(100), idEmail)
+            .query('SP_GET_PASS_x_ID_EMAIL @idEmail');
+        pool.close.bind(pool);
+        return resultado.recordset ? resultado.recordset[0] : null;
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports = {
     getTotalUsuarios: getTotalUsuarios,
@@ -155,7 +169,8 @@ module.exports = {
     postUsuario: postUsuario,
     putUsuario_x_idEmail: putUsuario_x_idEmail,
     deleteUsuario_x_idEmail: deleteUsuario_x_idEmail,
-    patchUsuario_x_idEmail: patchUsuario_x_idEmail
+    patchUsuario_x_idEmail: patchUsuario_x_idEmail,
+    getUsuarioPass_x_idEmail:getUsuarioPass_x_idEmail
 };
 
 

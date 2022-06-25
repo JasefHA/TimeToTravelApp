@@ -313,6 +313,48 @@ end catch
 
 	-- exec PATCH_SP_ACTUALIZAR_PASS 1,'123456789'
 
+create PROC SP_GET_PASS_x_ID_EMAIL(
+										@idEmail varchar(50)=''
+									)
+AS
+set nocount on
+
+begin try
+	DECLARE @id int
+	if exists(select * from t_Usuario where email = @idEmail and idEstado=1)
+	begin
+		SET @id = (SELECT TOP (1) idUsuario FROM t_Usuario where email = @idEmail and idEstado=1)
+	end
+	ELSE
+	BEGIN
+		if exists(select * from t_Usuario where idUsuario = @idEmail and idEstado=1)
+		begin
+			SET @id = cast(@idEmail as int)
+		END
+	END
+
+	if exists(select * from t_Usuario where idUsuario = @id and idEstado=1)
+	begin
+
+		SELECT U.idUsuario as 'id',U.nombre,U.apellido,U.email,U.imagen,U.pass,E.estado,R.rol ,G.google
+		FROM t_Usuario U
+		INNER JOIN t_Estado E
+		ON E.idEstado =U.idEstado 
+		INNER JOIN t_Rol R
+		ON R.idRol =U.idRol
+		INNER JOIN t_Google G
+		ON G.idGoogle =U.idGoogle
+		WHERE U.idEstado=1 and U.idUsuario =@id
+
+	END
+end try
+begin catch
+
+end catch
+
+	-- exec SP_GET_PASS_x_ID_EMAIL 2
+
+
 -- SELECT * FROM t_Usuario
 -- SELECT * FROM t_Estado
 -- SELECT * FROM t_Rol
