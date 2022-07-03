@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -21,17 +23,23 @@ class _MyPage extends State<MyPage> {
   bool isAPIcallprocess = false;
   bool hidePassword = true;
 
+  final baseUrl = 'http://10.0.2.2:3000';
+  final headers = {'Content-Type': 'application/json;charset=UTF-8'};
+
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
-  String? username;
+  String? email;
   String? password;
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: HexColor("#283B71"),
+        backgroundColor: HexColor('#283B71'),
         body: ProgressHUD(
-          child: Form(key: globalFormKey, child: _loginUI(context)),
+          child: Form(
+            key: globalFormKey,
+            child: _loginUI(context),
+          ),
           inAsyncCall: isAPIcallprocess,
           opacity: 0.3,
           key: UniqueKey(),
@@ -63,7 +71,7 @@ class _MyPage extends State<MyPage> {
                 Align(
                   alignment: Alignment.center,
                   child: Image.asset(
-                    "assets/logo.png",
+                    'assets/logo.png',
                     width: 250,
                     fit: BoxFit.contain,
                   ),
@@ -78,7 +86,7 @@ class _MyPage extends State<MyPage> {
               top: 50,
             ),
             child: Text(
-              "Login",
+              'Iniciar sesión',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 25,
@@ -86,14 +94,25 @@ class _MyPage extends State<MyPage> {
               ),
             ),
           ),
-          FormHelper.inputFieldWidget(context, "username", "Username",
-              (onValideVal) {
-            if (onValideVal.isEmpty) {
-              print("usuario vacio");
-              return "Username can\t be empty";
-            }
-            return null;
-          }, (onSavedVal) => {username = onSavedVal},
+          //email
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: FormHelper.inputFieldWidget(
+              context,
+              "email",
+              "email",
+              (onValidate) {
+                if (onValidate.isEmpty) {
+                  return "Campo obligatorio";
+                }
+                String pattern = r'\w+@\w+\.\w+';
+                if (!RegExp(pattern).hasMatch(onValidate)) {
+                  return "Email invalido";
+                }
+                //email = onValideVal;
+                return null;
+              },
+              (onSaved) => {email = onSaved},
               initialValue: "",
               obscureText: false,
               prefixIcon: const Icon(Icons.person),
@@ -102,117 +121,51 @@ class _MyPage extends State<MyPage> {
               prefixIconColor: Colors.white,
               textColor: Colors.white,
               hintColor: Colors.white.withOpacity(0.7),
-              borderRadius: 10),
+              borderRadius: 10,
+            ),
+          ),
+          //password
           Padding(
             padding: const EdgeInsets.only(top: 20),
-            child: FormHelper.inputFieldWidget(context, "password", "Password",
-                (onValideVal) {
-              if (onValideVal.isEmpty) {
-                print("contrasena vacio");
-                return "Password can\t be empty";
-              }
-              return null;
-            }, (onSavedVal) => {
-              password = onSavedVal
-            },
-                initialValue: "",
-                prefixIcon: const Icon(Icons.person),
-                borderColor: Colors.white,
-                borderFocusColor: Colors.white,
-                prefixIconColor: Colors.white,
-                textColor: Colors.white,
-                hintColor: Colors.white.withOpacity(0.7),
-                borderRadius: 10,
-                obscureText: hidePassword,
-                suffixIcon: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        hidePassword = !hidePassword;
-                      });
+            child: FormHelper.inputFieldWidget(
+              context,
+              "password",
+              "Password",
+              (onValidate) {
+                if (onValidate.isEmpty) {
+                  return "El campo es obligatorio";
+                }
+                //password = onValideVal;
+                return null;
+              },
+              (onSaved) => {password = onSaved},
+              //(onSavedVal) => {username = onSavedVal}
+              initialValue: "",
+              prefixIcon: const Icon(Icons.person),
+              borderColor: Colors.white,
+              borderFocusColor: Colors.white,
+              prefixIconColor: Colors.white,
+              textColor: Colors.white,
+              hintColor: Colors.white.withOpacity(0.7),
+              borderRadius: 10,
+              obscureText: hidePassword,
+              suffixIcon: IconButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      hidePassword = !hidePassword;
                     },
-                    color: Colors.white.withOpacity(0.7),
-                    icon: Icon(hidePassword
-                        ? Icons.visibility_off
-                        : Icons.visibility))),
-          ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: const EdgeInsets.only(right: 25, top: 10),
-              child: RichText(
-                text: TextSpan(
-                    style: const TextStyle(color: Colors.grey, fontSize: 14),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: 'Olvidaste la contraseña ?',
-                          style: const TextStyle(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              print("FORGET PASSWORD");
-                            }),
-                    ]),
+                  );
+                },
+                color: Colors.white.withOpacity(0.7),
+                icon: Icon(
+                    hidePassword ? Icons.visibility_off : Icons.visibility),
               ),
             ),
           ),
-          const SizedBox(height: 20),
-          Center(
-            child: FormHelper.submitButton("Ingresar", () {
-              if (validateAndSave()) {
-                setState(() {
-                  isAPIcallprocess = true;
-                });
-
-                LoginRequestModel model =
-                    LoginRequestModel(username: username, password: password);
-
-                APIService.login(model).then((response) {
-                  setState(() {
-                        isAPIcallprocess = false;
-                  });
-
-                  if (response) {
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      '/home',
-                      (route) => false,
-                    );
-                  } else {
-                    FormHelper.showSimpleAlertDialog(
-                      context,
-                      Config.appName,
-                      "Invalid Username/Password !!",
-                      "OK",
-                      () {
-                        Navigator.of(context).pop();
-                      },
-                    );
-                  }
-                });
-              }
-            },
-                btnColor: AppColors.mainColor,
-                borderColor: Colors.white,
-                txtColor: Colors.white,
-                borderRadius: 10),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Center(
-            child: Text(
-              "OR",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Colors.white),
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Center(
+          //
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
             child: Align(
               alignment: Alignment.bottomRight,
               child: Padding(
@@ -221,17 +174,78 @@ class _MyPage extends State<MyPage> {
                   text: TextSpan(
                       style: const TextStyle(color: Colors.grey, fontSize: 14),
                       children: <TextSpan>[
-                        const TextSpan(text: "No tienes una cuenta ?"),
                         TextSpan(
-                            text: 'Regístrate',
+                            text: 'Olvidaste la contraseña ?',
                             style: const TextStyle(
                                 color: Colors.white,
                                 decoration: TextDecoration.underline),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                Navigator.pushNamed(context, "/register");
-                              }),
+                            recognizer: TapGestureRecognizer()..onTap = () {}),
                       ]),
+                ),
+              ),
+            ),
+          ),
+          // btn iniciar
+          Padding(
+            padding: const EdgeInsets.only(top: 40),
+            child: Center(
+              child: FormHelper.submitButton(
+                'Ingresar',
+                () {
+                  if (validateAndSave()) {
+                    setState(() {
+                      isAPIcallprocess = true;
+                    });
+                    login();
+                  }
+                },
+                btnColor: AppColors.mainColor,
+                borderColor: Colors.white,
+                txtColor: Colors.white,
+                borderRadius: 10,
+              ),
+            ),
+          ),
+
+          const Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Center(
+              child: Text(
+                'Ó',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Center(
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 25, top: 10),
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      children: <TextSpan>[
+                        const TextSpan(text: 'No tienes una cuenta ?'),
+                        TextSpan(
+                          text: 'Regístrate',
+                          style: const TextStyle(
+                              color: Colors.white,
+                              decoration: TextDecoration.underline),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.pushNamed(context, '/register');
+                            },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -248,5 +262,47 @@ class _MyPage extends State<MyPage> {
       return true;
     }
     return false;
+  }
+
+  void login() async {
+    final user = {
+      'email': email,
+      'password': password,
+    };
+    Response res = await post(
+      Uri.parse(baseUrl + '/api/login'),
+      headers: headers,
+      body: jsonEncode(user),
+    );
+
+    setState(() {
+      isAPIcallprocess = false;
+    });
+    if (res.statusCode == 200) {
+      // Navigator.pushNamed(context, '/home');
+      print(res.body); //aca me quede porsi   ... :D
+    } else {
+      msgUserNoCreate();
+    }
+  }
+
+  void msgUserNoCreate() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error al iniciar sesión'),
+          content: const Text('Email / password no valido'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Regresar'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

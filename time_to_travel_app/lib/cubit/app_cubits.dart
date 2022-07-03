@@ -2,10 +2,16 @@ import 'package:bloc/bloc.dart';
 import 'package:time_to_travel_app/Pages/detail_page.dart';
 import 'package:time_to_travel_app/cubit/app_cubit_states.dart';
 import 'package:time_to_travel_app/model/data_model.dart';
+import 'package:time_to_travel_app/services/auth_services.dart';
 import 'package:time_to_travel_app/services/data_services.dart';
+import 'package:time_to_travel_app/services/user_services.dart';
 
 class AppCubits extends Cubit<CubitStates> {
-  AppCubits({required this.data}) : super(InitialState()) {
+  AppCubits({
+    required this.data,
+    required this.user,
+    required this.auth,
+  }) : super(InitialState()) {
     emit(WelcomeState());
   }
   final DataServices data;
@@ -13,6 +19,10 @@ class AppCubits extends Cubit<CubitStates> {
   late final restaurants;
   late final alojamientos;
   late final paquetes;
+
+  final UserServices user;
+  final AuthServices auth;
+
   void getData() async {
     try {
       emit(LoadingState());
@@ -20,7 +30,7 @@ class AppCubits extends Cubit<CubitStates> {
       restaurants = await data.getRestaurantes();
       alojamientos = await data.getAlojamientos();
       paquetes = await data.getPaquetes();
-      emit(LoadedState(places,restaurants,alojamientos,paquetes));
+      emit(LoadedState(places, restaurants, alojamientos, paquetes));
     } catch (e) {
       print(e);
     }
@@ -31,6 +41,6 @@ class AppCubits extends Cubit<CubitStates> {
   }
 
   goHome() {
-    emit(LoadedState(places,restaurants,alojamientos,paquetes));
+    emit(LoadedState(places, restaurants, alojamientos, paquetes));
   }
 }
