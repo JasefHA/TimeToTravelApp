@@ -1,7 +1,11 @@
 part of 'usuario_cubit.dart';
 
 @immutable
-abstract class UsuarioState {}
+abstract class UsuarioState {
+  get nombre => null;
+
+  get email => null;
+}
 
 class UsuarioInitial extends UsuarioState {
   final existeUsuario = false;

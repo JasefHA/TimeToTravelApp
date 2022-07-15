@@ -284,18 +284,20 @@ class _MyPage extends State<MyPage> {
       isAPIcallprocess = false;
     });
     if (res.statusCode == 200) {
-      //Navigator.pushReplacementNamed(context, '/home');
       //Navigator.pushNamed(context, '/home');
-      print(res.body); //aca me quede porsi   ... :D
+      print(res.body);
       // ++++++++++++++++++++++++++++++++++++++++++
-      final registro = Map.from(jsonDecode(res.body));
-      final UserModel usuario = UserModel.fromJson(registro);
-
+      print(jsonDecode(res.body));
+      Map<String, dynamic> registro = Map.from(jsonDecode(res.body));
+      final UserModel usuarioLogin = UserModel.fromJson(registro);
+      BlocProvider.of<UsuarioCubit>(context).seleccionarUsuario(usuarioLogin);
       //print('que tipo es');
       //print(res.runtimeType);
       print('usuario');
-      print(usuario.runtimeType);
-      print(usuario.nombre);
+      print(res);
+      print(usuarioLogin.runtimeType);
+      print('usuario-nombre');
+      print(usuarioLogin.nombre);
       //context.bloc<UsuarioCubit>().seleccionarUsuario();
       //BlocProvider.of<UsuarioCubit>(context);
       // ++++++++++++++++++++++++++++++++++++++++++

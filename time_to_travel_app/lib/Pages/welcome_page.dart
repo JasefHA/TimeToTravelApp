@@ -59,9 +59,11 @@ class _WelcomePageState extends State<WelcomePage> {
                           child: Container(
                             width: 200,
                             child: Row(
-                              children: [ResponsiveButton(
-                                width: 120,
-                              )],
+                              children: [
+                                ResponsiveButton(
+                                  width: 120,
+                                )
+                              ],
                             ),
                           ),
                         )

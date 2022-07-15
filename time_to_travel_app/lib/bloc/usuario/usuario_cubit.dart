@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:time_to_travel_app/Pages/NavPages/main_Page.dart';
 import 'package:time_to_travel_app/cubit/app_cubit_states.dart';
 import 'package:time_to_travel_app/model/user_model.dart';
 
@@ -10,5 +11,9 @@ class UsuarioCubit extends Cubit<UsuarioState> {
 
   void seleccionarUsuario(UserModel user) {
     emit(UsuarioActivo(user));
+  }
+
+  goHomePage() {
+    return MainPage();
   }
 }

@@ -23,16 +23,17 @@ class _AppCubitsLogicsState extends State<AppCubitsLogics> {
         if (state is WelcomeState) {
           return WelcomePage();
         }
+        if (state is HomePageState) {
+          return HomePage();
+        }
         if (state is DetailState) {
           return DetailPage();
         }
         if (state is LoadedState) {
           return MainPage();
         }
-        if (state is HomePageState) {
-          return HomePage();
-        }
         if (state is LoadingState) {
+          //return HomePage();
           return const Center(child: CircularProgressIndicator());
         } else {
           return Container();

@@ -25,7 +25,7 @@ class UserModel {
     this.refreshToken,
   });
 
-  factory UserModel.fromJson(Map json) {
+  factory UserModel.fromJson(Map<String, dynamic> json) {
     // factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json["id"],
