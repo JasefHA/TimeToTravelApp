@@ -8,9 +8,14 @@ import 'package:snippet_coder_utils/ProgressHUD.dart';
 import 'package:snippet_coder_utils/hex_color.dart';
 import 'package:time_to_travel_app/Colors/colors.dart';
 import 'package:time_to_travel_app/Pages/NavPages/register_page.dart';
+import 'package:time_to_travel_app/bloc/usuario/usuario_cubit.dart';
 import 'package:time_to_travel_app/config.dart';
+import 'package:time_to_travel_app/cubit/app_cubits.dart';
 import 'package:time_to_travel_app/model/login_request_model.dart';
+import 'package:time_to_travel_app/model/user_model.dart';
 import 'package:time_to_travel_app/services/api_services.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class MyPage extends StatefulWidget {
   MyPage({Key? key}) : super(key: key);
@@ -38,7 +43,7 @@ class _MyPage extends State<MyPage> {
         body: ProgressHUD(
           child: Form(
             key: globalFormKey,
-            child: _loginUI(context),
+            child: loginUI(context),
           ),
           inAsyncCall: isAPIcallprocess,
           opacity: 0.3,
@@ -48,7 +53,7 @@ class _MyPage extends State<MyPage> {
     );
   }
 
-  Widget _loginUI(BuildContext context) {
+  Widget loginUI(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -279,8 +284,21 @@ class _MyPage extends State<MyPage> {
       isAPIcallprocess = false;
     });
     if (res.statusCode == 200) {
-      // Navigator.pushNamed(context, '/home');
+      //Navigator.pushReplacementNamed(context, '/home');
+      //Navigator.pushNamed(context, '/home');
       print(res.body); //aca me quede porsi   ... :D
+      // ++++++++++++++++++++++++++++++++++++++++++
+      final registro = Map.from(jsonDecode(res.body));
+      final UserModel usuario = UserModel.fromJson(registro);
+
+      //print('que tipo es');
+      //print(res.runtimeType);
+      print('usuario');
+      print(usuario.runtimeType);
+      print(usuario.nombre);
+      //context.bloc<UsuarioCubit>().seleccionarUsuario();
+      //BlocProvider.of<UsuarioCubit>(context);
+      // ++++++++++++++++++++++++++++++++++++++++++
     } else {
       msgUserNoCreate();
     }

@@ -298,6 +298,8 @@ class _RegisterPage extends State<RegisterPage> {
                           ),
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
+                              print('context register');
+                              print(context);
                               Navigator.pushNamed(context, '/login');
                             },
                         ),

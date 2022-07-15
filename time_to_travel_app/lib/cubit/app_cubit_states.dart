@@ -43,6 +43,14 @@ class DetailState extends CubitStates {
   List<Object> get props => [places];
 }
 
+class HomePageState extends CubitStates {
+  HomePageState(this.homePage);
+  final HomePageState homePage;
+  @override
+  //todo: implements props
+  List<Object> get props => [homePage];
+}
+
 class UserState extends CubitStates {
   UserState(this.userF);
   final UserState userF;

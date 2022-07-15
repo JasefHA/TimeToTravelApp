@@ -9,8 +9,6 @@ import 'package:time_to_travel_app/services/user_services.dart';
 class AppCubits extends Cubit<CubitStates> {
   AppCubits({
     required this.data,
-    required this.user,
-    required this.auth,
   }) : super(InitialState()) {
     emit(WelcomeState());
   }
@@ -19,9 +17,6 @@ class AppCubits extends Cubit<CubitStates> {
   late final restaurants;
   late final alojamientos;
   late final paquetes;
-
-  final UserServices user;
-  final AuthServices auth;
 
   void getData() async {
     try {
